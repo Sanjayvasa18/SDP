@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState("");
-  const [role, setRole] = useState("student");
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -57,7 +57,7 @@ const LoginPage = () => {
         {error && (
           <div className="error-banner" style={{ color: "#b00020", marginBottom: "12px", textAlign: "center" }}>{error}</div>
         )}
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
           {isSignUp && (
             <>
               <div className="form-group">
@@ -69,6 +69,7 @@ const LoginPage = () => {
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="Enter your full name"
+                  autoComplete="off"
                   required
                 />
               </div>
@@ -79,7 +80,9 @@ const LoginPage = () => {
                   id="role"
                   value={role}
                   onChange={e => setRole(e.target.value)}
+                  required
                 >
+                  <option value="" disabled>Select role</option>
                   <option value="student">Student</option>
                   <option value="teacher">Teacher</option>
                 </select>
@@ -95,6 +98,7 @@ const LoginPage = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="Enter your email"
+              autoComplete="off"
               required
             />
           </div>
@@ -107,6 +111,7 @@ const LoginPage = () => {
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
+              autoComplete="new-password"
               required
             />
             <button
@@ -129,6 +134,7 @@ const LoginPage = () => {
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter your password"
+                autoComplete="new-password"
                 required
               />
             </div>
@@ -149,7 +155,15 @@ const LoginPage = () => {
               cursor: "pointer",
               fontWeight: "bold"
             }}
-            onClick={() => setIsSignUp(prev => !prev)}
+            onClick={() => {
+              setIsSignUp(prev => !prev);
+              // Clear all fields and prevent autofill when switching modes
+              setName("");
+              setRole("");
+              setEmail("");
+              setPassword("");
+              setConfirmPassword("");
+            }}
           >
             {isSignUp ? "Sign In" : "Sign Up"}
           </button>
