@@ -13,13 +13,14 @@ import {
   User,
   Users,
   Star,
-  RefreshCw
+  RefreshCw,
+  Trash2
 } from 'lucide-react';
 import TaskSubmissionModal from '../components/TaskSubmissionModal';
 
 const StudentDashboard = () => {
   const { user, logout } = useAuth();
-  const { getTasksByStudent, submitTask } = useProjects();
+  const { getTasksByStudent, submitTask, deleteSubmission } = useProjects();
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -69,6 +70,12 @@ const StudentDashboard = () => {
       win.document.body.innerHTML = `
         <iframe src="${fileUrl}" style="border:0;width:100%;height:100vh"></iframe>
       `;
+    }
+  };
+
+  const handleDeleteSubmission = (projectId, taskId) => {
+    if (window.confirm('Are you sure you want to delete this submission? You can submit again later.')) {
+      deleteSubmission(projectId, taskId);
     }
   };
 
@@ -224,6 +231,16 @@ const StudentDashboard = () => {
                                 </button>
                               </div>
                             )}
+                            <div className="task-actions" style={{ marginTop: '8px' }}>
+                              <button 
+                                onClick={() => handleDeleteSubmission(project.id, task.id)}
+                                className="submit-button"
+                                style={{ background: '#dc3545' }}
+                              >
+                                <Trash2 size={16} />
+                                Delete Submission
+                              </button>
+                            </div>
                           </div>
                         ) : (
                           <div className="task-actions">

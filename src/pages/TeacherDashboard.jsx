@@ -13,14 +13,15 @@ import {
   FileText,
   User,
   Star,
-  RefreshCw
+  RefreshCw,
+  Trash2
 } from 'lucide-react';
 import CreateProjectModal from '../components/CreateProjectModal';
 import CreateTaskModal from '../components/CreateTaskModal';
 
 const TeacherDashboard = () => {
   const { user, logout, getStudentsByTeacher } = useAuth();
-  const { projects, createProject, addTask, updateTask, scoreTask, requestResubmission } = useProjects();
+  const { projects, createProject, addTask, updateTask, deleteTask, scoreTask, requestResubmission } = useProjects();
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -101,6 +102,12 @@ const TeacherDashboard = () => {
   const handleRequestResubmission = (projectId, taskId) => {
     if (window.confirm('Are you sure you want to request resubmission for this task?')) {
       requestResubmission(projectId, taskId);
+    }
+  };
+
+  const handleDeleteTask = (projectId, taskId) => {
+    if (window.confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+      deleteTask(projectId, taskId);
     }
   };
 
@@ -219,19 +226,29 @@ const TeacherDashboard = () => {
                                 </div>
                               </div>
                               <div className="task-status">
-                                <select
-                                  value={task.status}
-                                  onChange={(e) => handleTaskStatusUpdate(
-                                    project.id, 
-                                    task.id, 
-                                    e.target.value
-                                  )}
-                                  className="status-select"
-                                >
-                                  <option value="pending">Pending</option>
-                                  <option value="in_progress">In Progress</option>
-                                  <option value="completed">Completed</option>
-                                </select>
+                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                                  <select
+                                    value={task.status}
+                                    onChange={(e) => handleTaskStatusUpdate(
+                                      project.id, 
+                                      task.id, 
+                                      e.target.value
+                                    )}
+                                    className="status-select"
+                                  >
+                                    <option value="pending">Pending</option>
+                                    <option value="in_progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                  </select>
+                                  <button
+                                    onClick={() => handleDeleteTask(project.id, task.id)}
+                                    className="action-button"
+                                    style={{ background: '#dc3545', color: 'white', border: 'none' }}
+                                  >
+                                    <Trash2 size={16} />
+                                    Delete
+                                  </button>
+                                </div>
                                 {task.submission && (
                                   <div className="submission-actions">
                                     <div className="submission-info">

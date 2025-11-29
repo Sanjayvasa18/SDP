@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -130,18 +131,27 @@ const LoginPage = () => {
             </button>
           </div>
           {isSignUp && (
-            <div className="form-group">
+            <div className="form-group password-input-container">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
                 className="form-input"
                 id="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter your password"
                 autoComplete="new-password"
                 required
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                tabIndex={-1}
+                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+              >
+                {showConfirmPassword ? "🙈" : "👁️"}
+              </button>
             </div>
           )}
           <button type="submit" className="login-button">
@@ -168,6 +178,8 @@ const LoginPage = () => {
               setEmail("");
               setPassword("");
               setConfirmPassword("");
+              setShowPassword(false);
+              setShowConfirmPassword(false);
             }}
           >
             {isSignUp ? "Sign In" : "Sign Up"}

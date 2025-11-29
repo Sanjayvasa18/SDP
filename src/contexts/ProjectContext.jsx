@@ -147,6 +147,36 @@ export const ProjectProvider = ({ children }) => {
     ));
   };
 
+  const deleteTask = (projectId, taskId) => {
+    setProjects(prev => prev.map(project => 
+      project.id === projectId 
+        ? {
+            ...project,
+            tasks: project.tasks.filter(task => task.id !== taskId)
+          }
+        : project
+    ));
+  };
+
+  const deleteSubmission = (projectId, taskId) => {
+    setProjects(prev => prev.map(project => 
+      project.id === projectId 
+        ? {
+            ...project,
+            tasks: project.tasks.map(task => 
+              task.id === taskId 
+                ? { 
+                    ...task, 
+                    submission: undefined,
+                    status: 'pending'
+                  }
+                : task
+            )
+          }
+        : project
+    ));
+  };
+
   const getProjectsByTeacher = (teacherId) => {
     return projects.filter(project => project.teacherId === teacherId);
   };
@@ -176,9 +206,11 @@ export const ProjectProvider = ({ children }) => {
     deleteProject,
     addTask,
     updateTask,
+    deleteTask,
     submitTask,
     scoreTask,
     requestResubmission,
+    deleteSubmission,
     getProjectsByTeacher,
     getProjectsByStudent,
     getTasksByStudent
