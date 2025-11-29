@@ -187,14 +187,31 @@ const StudentDashboard = () => {
                         {task.submission ? (
                           <div className="submission-info">
                             <div className="submission-header">
-                              <FileText size={16} />
-                              <span>Submitted</span>
-                              {task.submission.resubmissionRequired && (
-                                <div className="resubmission-badge">
-                                  <RefreshCw size={14} />
-                                  <span>Resubmission Required</span>
-                                </div>
-                              )}
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                                <FileText size={16} />
+                                <span>Submitted</span>
+                                {task.submission.resubmissionRequired && (
+                                  <div className="resubmission-badge">
+                                    <RefreshCw size={14} />
+                                    <span>Resubmission Required</span>
+                                  </div>
+                                )}
+                              </div>
+                              <button
+                                onClick={() => handleDeleteSubmission(project.id, task.id)}
+                                className="action-button"
+                                style={{ 
+                                  background: '#dc3545', 
+                                  color: 'white', 
+                                  border: 'none',
+                                  padding: '6px 12px',
+                                  fontSize: '12px'
+                                }}
+                                title="Remove Submission"
+                              >
+                                <Trash2 size={14} />
+                                Remove
+                              </button>
                             </div>
                             <div className="submission-details">
                               <p>File: {task.submission.fileName}</p>
@@ -231,16 +248,6 @@ const StudentDashboard = () => {
                                 </button>
                               </div>
                             )}
-                            <div className="task-actions" style={{ marginTop: '8px' }}>
-                              <button 
-                                onClick={() => handleDeleteSubmission(project.id, task.id)}
-                                className="submit-button"
-                                style={{ background: '#dc3545' }}
-                              >
-                                <Trash2 size={16} />
-                                Delete Submission
-                              </button>
-                            </div>
                           </div>
                         ) : (
                           <div className="task-actions">
