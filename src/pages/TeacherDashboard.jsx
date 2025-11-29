@@ -21,7 +21,7 @@ import CreateTaskModal from '../components/CreateTaskModal';
 
 const TeacherDashboard = () => {
   const { user, logout, getStudentsByTeacher } = useAuth();
-  const { projects, createProject, addTask, updateTask, deleteTask, scoreTask, requestResubmission } = useProjects();
+  const { projects, createProject, deleteProject, addTask, updateTask, deleteTask, scoreTask, requestResubmission } = useProjects();
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -111,6 +111,12 @@ const TeacherDashboard = () => {
     }
   };
 
+  const handleDeleteProject = (projectId) => {
+    if (window.confirm('Are you sure you want to delete this project? This will delete all tasks and submissions. This action cannot be undone.')) {
+      deleteProject(projectId);
+    }
+  };
+
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -158,10 +164,21 @@ const TeacherDashboard = () => {
                 return (
                   <div key={project.id} className="project-card">
                     <div className="project-header">
-                      <h3>{project.title}</h3>
-                      <span className={`status-badge ${project.status}`}>
-                        {project.status}
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+                        <h3>{project.title}</h3>
+                        <span className={`status-badge ${project.status}`}>
+                          {project.status}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteProject(project.id)}
+                        className="action-button"
+                        style={{ background: '#dc3545', color: 'white', border: 'none' }}
+                        title="Delete Project"
+                      >
+                        <Trash2 size={16} />
+                        Delete Project
+                      </button>
                     </div>
                     
                     <p className="project-description">{project.description}</p>
