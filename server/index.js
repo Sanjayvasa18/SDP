@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './db/mongodb.js';
+import authRoutes from './routes/auth.js';
 
 // Load environment variables (try .env.local first, then .env)
 dotenv.config({ path: '.env.local' });
@@ -16,6 +17,9 @@ app.use(express.json());
 
 // Connect to MongoDB
 connectDB().catch(console.error);
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
